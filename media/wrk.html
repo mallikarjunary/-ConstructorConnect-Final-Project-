@@ -1,0 +1,70 @@
+{% extends 'user/userbase.html' %}
+{% load static %}
+
+{% block contents %}
+
+<section class="">
+    <div class="container py-4">
+        <div class="row d-flex justify-content-center py-5">
+            <div class="col-md-12">
+                <h1>Contractor Bids</h1>
+                <form method="post" action="{% url 'handle_bids' %}">
+                    {% csrf_token %}
+                    <table border="2px" class="table table-hover table-dark">
+                        <thead>
+                            <tr class="table-danger">
+                                <th scope="col">S.No</th>
+                                <th scope="col">Bedrooms</th>
+                                <th scope="col">Bathrooms</th>
+                                <th scope="col">Sqft Total</th>
+                                <th scope="col">Floors</th>
+                                <th scope="col">House Type</th>
+                                <th scope="col">City</th>
+                                <th scope="col">State</th>
+                                <th scope="col">Budget</th>
+                                <th scope="col">Bid Amount</th>
+                                <th scope="col">Contractor Name</th>
+                                <th scope="col">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if contractor_bids %}
+                                {% for item in contractor_bids %}
+                                    <tr style="color: BLUE; background-color:#FFFCBB">
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>{{ item.house_bidding.bedrooms }}</td>
+                                        <td>{{ item.house_bidding.bathrooms }}</td>
+                                        <td>{{ item.house_bidding.sqft_total }}</td>
+                                        <td>{{ item.house_bidding.floors }}</td>
+                                        <td>{{ item.house_bidding.house_type }}</td>
+                                        <td>{{ item.house_bidding.city }}</td>
+                                        <td>{{ item.house_bidding.state }}</td>
+                                        <td>{{ item.house_bidding.Budget }}</td>
+                                        <td>{{ item.bid.bid_amount }}</td>
+                                        <td>{{ item.bid.contractor }}</td>
+                                        <td>
+                                            <select name="status_{{ item.bid.id }}">
+                                                <option value="">Select</option>
+                                                <option value="Accepted">Accept</option>
+                                                <option value="Rejected">Reject</option>
+                                            </select>
+                                            <input type="hidden" name="property_id_{{ item.bid.id }}" value="{{ item.house_bidding.id }}">
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            {% else %}
+                                <tr>
+                                    <td colspan="12" class="text-center">No bids found.</td>
+                                </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+
